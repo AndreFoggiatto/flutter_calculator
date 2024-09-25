@@ -1,61 +1,129 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Calculator(),
     );
   }
 }
 
+enum Exchange{
+  Real,
+  Euro,
+  Dollar
+}
+
+
 class Calculator extends StatefulWidget {
+
+  const Calculator({super.key});
+
   @override
   _CalculatorState createState() => _CalculatorState();
 }
 
 class _CalculatorState extends State<Calculator> {
-  String _selectedOption = 'Dólar Americano (USD)';
-  String _selectedOption2 = 'Dólar Americano (USD)';
-  TextEditingController _valueController = TextEditingController();
+  Exchange exchangeName = Exchange.Dollar;
+  Exchange exchangeName2 = Exchange.Dollar;
+  double value1 = 0;
+  double value2 = 0;
+
+  final TextEditingController _valueController = TextEditingController();
+
+  String _getExchangeName(Exchange exchange) {
+    switch (exchange) {
+      case Exchange.Dollar:
+        return 'Dólar Americano (USD)';
+      case Exchange.Euro:
+        return 'Euro (EUR)';
+      case Exchange.Real:
+        return 'Real (BRL)';
+      default:
+        return '';
+    }
+  }
+
+  double _convertExchange(Exchange exchange1, Exchange exchange2) {
+    switch (exchange1) {
+      case Exchange.Real:
+        switch (exchange2) {
+          case Exchange.Real:
+            return value1;
+          case Exchange.Euro:
+            return value1 * 0.16;
+          case Exchange.Dollar:
+            return value1 * 0.18;
+        }
+      case Exchange.Dollar:
+        switch (exchange2) {
+          case Exchange.Real:
+            return value1 * 5.45;
+          case Exchange.Euro:
+            return value1 * 0.89;
+          case Exchange.Dollar:
+            return value1;
+        }
+      case Exchange.Euro:
+        switch (exchange2) {
+          case Exchange.Real:
+            return value1 * 6.1;
+          case Exchange.Euro:
+            return value1;
+          case Exchange.Dollar:
+            return value1 * 1.12;
+        }
+      default:
+        return 0;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Center(
             child: Container(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 maxWidth: 768,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 50),
-                  Text(
+                  const SizedBox(height: 50),
+                  const Text(
                     'Conversor de Moedas',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 5),
-                  Text(
+                  const SizedBox(height: 5),
+                  const Text(
                     'Cotação atualizada em 24/09/2024',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Valor',
                         style: TextStyle(fontSize: 16),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            value1 = double.parse(value);
+                          });
+                        },
                         controller: _valueController,
                         decoration: InputDecoration(
                           hintText: 'Digite o valor',
@@ -69,50 +137,30 @@ class _CalculatorState extends State<Calculator> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(
+                      const SizedBox(height: 20),
+                      const Text(
                         'Converter de:',
                         style: TextStyle(fontSize: 16),
                       ),
                       _buildExpansionList(),
-                      SizedBox(height: 15),
-                      Text(
+                      const SizedBox(height: 15),
+                      const Text(
                         'Para:',
                         style: TextStyle(fontSize: 16),
                       ),
                       _buildExpansionList2(),
-                      SizedBox(height: 24),
-                      Center(
+                      const SizedBox(height: 24),
+                       Center(
                         child: Text(
-                          'O valor convertido é 0,00',
+                          'O valor convertido é ${_convertExchange(exchangeName, exchangeName2).toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      SizedBox(height: 24),
-                      Container(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: Text(
-                            'Converter',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
+
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -122,7 +170,7 @@ class _CalculatorState extends State<Calculator> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               elevation: 2,
-                              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40),
+                              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40),
                             ),
                             onPressed: () {
                               setState(() {
@@ -132,11 +180,11 @@ class _CalculatorState extends State<Calculator> {
                                 }
                               });
                             },
-                            child: Text('Deletar'),
+                            child: const Text('Deletar'),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       buildRow(['7', '8', '9']),
                       buildRow(['4', '5', '6']),
                       buildRow(['1', '2', '3']),
@@ -160,34 +208,34 @@ class _CalculatorState extends State<Calculator> {
       ),
       child: ExpansionTile(
         title: Text(
-          _selectedOption,
-          style: TextStyle(fontSize: 16),
+          _getExchangeName(exchangeName),
+          style: const TextStyle(fontSize: 16),
         ),
         children: <Widget>[
           ListTile(
-            title: Text('Dólar Americano (USD)'),
-            selected: _selectedOption == 'Dólar Americano (USD)',
+            title: const Text('Dólar Americano (USD)'),
+            selected: exchangeName == Exchange.Dollar,
             onTap: () {
               setState(() {
-                _selectedOption = 'Dólar Americano (USD)';
+                exchangeName = Exchange.Dollar;
               });
             },
           ),
           ListTile(
-            title: Text('Euro (EUR)'),
-            selected: _selectedOption == 'Euro (EUR)',
+            title: const Text('Euro (EUR)'),
+            selected: exchangeName == Exchange.Euro,
             onTap: () {
               setState(() {
-                _selectedOption = 'Euro (EUR)';
+                exchangeName = Exchange.Euro;
               });
             },
           ),
           ListTile(
-            title: Text('Real (BRL)'),
-            selected: _selectedOption == 'Real (BRL)',
+            title: const Text('Real (BRL)'),
+            selected: exchangeName == Exchange.Real,
             onTap: () {
               setState(() {
-                _selectedOption = 'Real (BRL)';
+                exchangeName = Exchange.Real;
               });
             },
           ),
@@ -204,34 +252,34 @@ class _CalculatorState extends State<Calculator> {
       ),
       child: ExpansionTile(
         title: Text(
-          _selectedOption2,
-          style: TextStyle(fontSize: 16),
+          _getExchangeName(exchangeName2),
+          style: const TextStyle(fontSize: 16),
         ),
         children: <Widget>[
           ListTile(
-            title: Text('Dólar Americano (USD)'),
-            selected: _selectedOption2 == 'Dólar Americano (USD)',
+            title: const Text('Dólar Americano (USD)'),
+            selected: exchangeName2 == Exchange.Dollar,
             onTap: () {
               setState(() {
-                _selectedOption2 = 'Dólar Americano (USD)';
+                exchangeName2 = Exchange.Dollar;
               });
             },
           ),
           ListTile(
-            title: Text('Euro (EUR)'),
-            selected: _selectedOption2 == 'Euro (EUR)',
+            title: const Text('Euro (EUR)'),
+            selected: exchangeName2 == Exchange.Euro,
             onTap: () {
               setState(() {
-                _selectedOption2 = 'Euro (EUR)';
+                exchangeName2 = Exchange.Euro;
               });
             },
           ),
           ListTile(
-            title: Text('Real (BRL)'),
-            selected: _selectedOption2 == 'Real (BRL)',
+            title: const Text('Real (BRL)'),
+            selected: exchangeName2 == Exchange.Real,
             onTap: () {
               setState(() {
-                _selectedOption2 = 'Real (BRL)';
+                exchangeName2 = Exchange.Real;
               });
             },
           ),
@@ -253,18 +301,18 @@ class _CalculatorState extends State<Calculator> {
                   _valueController.text += label;
                 });
               },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Text(
-                  label,
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 elevation: 2,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
             ),
           ),
