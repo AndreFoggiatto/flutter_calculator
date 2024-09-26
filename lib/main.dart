@@ -179,20 +179,14 @@ class _CalculatorState extends State<Calculator> {
                                 String currentText = _valueController.text;
 
                                 if (currentText.isNotEmpty) {
-                                  // Remove o último caractere
                                   String updatedText = currentText.substring(0, currentText.length - 1);
-
-                                  // Atualiza o controlador com o novo valor
                                   _valueController.text = updatedText;
-
-                                  // Verifica se o texto restante não está vazio antes de converter
                                   if (updatedText.isNotEmpty) {
-                                    double parsedValue = double.parse(updatedText);
+                                    double convertedValue = double.parse(updatedText);
 
-                                    value2 = parsedValue; // Atualize o valor conforme necessário
-                                    value1 = parsedValue; // Atualize o valor conforme necessário
+                                    value2 = convertedValue;
+                                    value1 = convertedValue;
                                   } else {
-                                    // Se o texto estiver vazio, definir os valores como zero
                                     value2 = 0;
                                     value1 = 0;
                                   }
