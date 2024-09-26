@@ -34,6 +34,7 @@ class _CalculatorState extends State<Calculator> {
   Exchange exchangeName2 = Exchange.Dollar;
   double value1 = 0;
   double value2 = 0;
+  double value3 = 0;
 
   final TextEditingController _valueController = TextEditingController();
 
@@ -175,9 +176,26 @@ class _CalculatorState extends State<Calculator> {
                             ),
                             onPressed: () {
                               setState(() {
-                                if (_valueController.text.isNotEmpty) {
-                                  _valueController.text = _valueController.text
-                                      .substring(0, _valueController.text.length - 1);
+                                String currentText = _valueController.text;
+
+                                if (currentText.isNotEmpty) {
+                                  // Remove o último caractere
+                                  String updatedText = currentText.substring(0, currentText.length - 1);
+
+                                  // Atualiza o controlador com o novo valor
+                                  _valueController.text = updatedText;
+
+                                  // Verifica se o texto restante não está vazio antes de converter
+                                  if (updatedText.isNotEmpty) {
+                                    double parsedValue = double.parse(updatedText);
+
+                                    value2 = parsedValue; // Atualize o valor conforme necessário
+                                    value1 = parsedValue; // Atualize o valor conforme necessário
+                                  } else {
+                                    // Se o texto estiver vazio, definir os valores como zero
+                                    value2 = 0;
+                                    value1 = 0;
+                                  }
                                 }
                               });
                             },
@@ -300,6 +318,7 @@ class _CalculatorState extends State<Calculator> {
               onPressed: () {
                 setState(() {
                   _valueController.text += label;
+                  value1 = double.parse(_valueController.text);
                 });
               },
               style: ElevatedButton.styleFrom(
