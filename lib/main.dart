@@ -120,7 +120,7 @@ class _CalculatorState extends State<Calculator> {
                       const SizedBox(height: 5),
                       TextField(
                         onChanged: (value) {
-                          // Teste
+
                           setState(() {
                             value1 = double.parse(value);
                           });
