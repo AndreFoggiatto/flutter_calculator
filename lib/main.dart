@@ -201,7 +201,7 @@ class _CalculatorState extends State<Calculator> {
                       buildRow(['7', '8', '9']),
                       buildRow(['4', '5', '6']),
                       buildRow(['1', '2', '3']),
-                      buildRow(['0', ',']),
+                      buildRow(['0', '.']),
                     ],
                   ),
                 ],
